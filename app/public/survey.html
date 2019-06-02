@@ -11,8 +11,18 @@
 </head>
 <body>
     <h1>THIS IS THE SURVEY PAGE</h1>
-    <button class="btn btn-primary btn-lrg">Submit Survey</button>
+    <button id="submit" class="btn btn-primary btn-lrg">Submit Survey</button>
+    <input id="test"></input>
 
-    
+    <script>
+    $('#submit').on('click', function(){
+        var data = $('#test').val();
+
+        $.post("/api/data", data)
+        .then(function(){
+            console.log('sent data succesfully');
+        });
+    });
+    </script>
 </body>
 </html>
