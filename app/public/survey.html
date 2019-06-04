@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/app/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <title>Survey</title>
@@ -18,7 +17,11 @@
             <div class="col-6">
                 
                 
-                <input id="test"></input>
+                <label>Name (Required)</label>
+                <input id="name"></input>
+                </br>
+                <label>Image URL (Required)</label>
+                <input id="image"></input>
                 
                 <p class="h6">Question 1</p>
                 <div class="form-group">
@@ -138,14 +141,75 @@
     
 
     <script>
-    $('#submit').on('click', function(){
-        var data = $('#test').val();
 
-        $.post("/api/data", data)
-        .then(function(){
+    var lowDiff = 41; //One number higher than maximum survey response difference
+    var x = 0;
+
+    function compareScores(arr1, arr2, index){
+        console.log('i am running');
+        var counter = 0;
+        x++;
+        for (i = 0; i <= 9; i++){
+            
+            diff = arr1[i] - arr2[i];
+            console.log('diff: ' + diff);
+ 
+            counter = counter + Math.abs(diff);
+            console.log('counter: ' + counter);
+        }
+        if (lowDiff > counter){
+            
+            lowDiff = counter;
+            console.log('lowdiff change:' + lowDiff);
+            
+            matchIndex = index;
+            console.log('match index:' + matchIndex);
+        };
+    };
+
+    $('#submit').on('click', function(){
+        
+        var user = {};
+
+        user.name = $('#name').val();
+        user.img = $('#image').val();
+        user.scores = [
+            $('#q1').val(),
+            $('#q2').val(),
+            $('#q3').val(),
+            $('#q4').val(),
+            $('#q5').val(),
+            $('#q6').val(),
+            $('#q7').val(),
+            $('#q8').val(),
+            $('#q9').val(),
+            $('#q10').val(),
+        ];
+
+        $.post("/api/data", user)
+        .then(function(user){
             console.log('sent data succesfully');
+            $.get("api/data")
+            .then(function(data){
+                console.log('user: ' + user);//user still exits within scope here
+
+                for (let i = 0; i < (data.users.length -1); i++){
+                    compareScores(user.scores, data.users[i].scores, i)
+                    console.log('data loop i: ' + i);
+                }
+
+                lowDiff = 41;
+                x = 0;
+
+                match = {name: data.users[matchIndex].name, image: data.users[matchIndex].img};
+                console.log(match);
+
+                
+            });
+            
         });
     });
     </script>
+
 </body>
 </html>

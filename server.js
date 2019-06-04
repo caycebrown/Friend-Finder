@@ -35,7 +35,7 @@ app.get("/survey", function(req, res){
 });
 
 app.get("/api/data", function(req, res){
-    res.json(dataFile.userData);
+    res.jsonp(dataFile.userData);
 });
 
 
@@ -44,6 +44,6 @@ app.get("/api/data", function(req, res){
 //========================================================================
 app.post("/api/data", function(req, res){
     var userRes = req.body;
-    dataFile.userData.push(userRes);
+    dataFile.userData.users.push(userRes);
     res.json(userRes);
 });
