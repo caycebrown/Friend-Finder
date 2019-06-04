@@ -142,6 +142,31 @@
 
     <script>
 
+    var lowDiff = 41; //One number higher than maximum survey response difference
+    var x = 0;
+
+    function compareScores(arr1, arr2, index){
+        console.log('i am running');
+        var counter = 0;
+        x++;
+        for (i = 0; i <= 9; i++){
+            
+            diff = arr1[i] - arr2[i];
+            console.log('diff: ' + diff);
+ 
+            counter = counter + Math.abs(diff);
+            console.log('counter: ' + counter);
+        }
+        if (lowDiff > counter){
+            
+            lowDiff = counter;
+            console.log('lowdiff change:' + lowDiff);
+            
+            matchIndex = index;
+            console.log('match index:' + matchIndex);
+        };
+    };
+
     $('#submit').on('click', function(){
         
         var user = {};
@@ -162,10 +187,29 @@
         ];
 
         $.post("/api/data", user)
-        .then(function(){
+        .then(function(user){
             console.log('sent data succesfully');
+            $.get("api/data")
+            .then(function(data){
+                console.log('user: ' + user);//user still exits within scope here
+
+                for (let i = 0; i < (data.users.length -1); i++){
+                    compareScores(user.scores, data.users[i].scores, i)
+                    console.log('data loop i: ' + i);
+                }
+
+                lowDiff = 41;
+                x = 0;
+
+                match = {name: data.users[matchIndex].name, image: data.users[matchIndex].img};
+                console.log(match);
+
+                
+            });
+            
         });
     });
     </script>
+
 </body>
 </html>
