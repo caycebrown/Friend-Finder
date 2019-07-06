@@ -62,6 +62,6 @@ Once node is installed, utilizing your terminal of choice run `npm install`.
 This will install the only dependency for this particular application - 'Express'.
 Documentation found here --> [Express NPM](https://www.npmjs.com/package/express)
 
-After npm has finished installing express run `node server.js` and then open your browser and navigate to **localhost:3000.
+After npm has finished installing express run `node server.js` and then open your browser and navigate to **localhost:3000**.
 
 
